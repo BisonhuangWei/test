@@ -1,0 +1,93 @@
+5、门禁系统搭建
+6、万晨的对接遗留任务
+7、repo替换gerrit
+8、单点登录
+9、门禁使用文档
+
+新项目CMO配置注意事项：（废除）
+1、创建新的项目文件夹，创建新的.repo文件夹。
+2、将git-repo复制到.repo，并将git-repo改名为repo
+3、然后在项目文件夹下，和.repo同级目录下，执行repo init（初次输入，可能需要输入用户名和邮箱）
+4、然后在.repo同级目录下输入repo sync。第一次repo sync必报错。
+5、第二次repo sync好使，以后项目更新不能删除.repo文件。           
+
+repo 提交
+(放弃修改repo abandon --all)
+0、repo工具git-repo复制到.repo文件夹下并重名为repo，设置权限chmod -R 777 .repo
+1、repo init -u ssh://a01-tongji.sys@10.10.0.49:29418/Rainbow/manifest -m Rainbow_baseline_20210427.xml
+
+repo init -u ssh://a01-tongji.sys@10.10.0.49:29418/Rainbow/manifest -b beluga -m Rainbow_branch_Beluga.xml
+repo init -u ssh://bison.huang@10.10.0.49:29418/Rainbow/manifest -b beluga -m Rainbow_branch_Beluga.xml
+2、repo sync
+5、repo start master  --all
+repo start beluga --all
+4、gitdir=$(git rev-parse --git-dir); scp -p -P 29418 a01-tongji.sys@10.10.0.49:hooks/commit-msg ${gitdir}/hooks/
+6、修改代码
+7、其中一个项目中git add提交  git commit -m 'xxxxx' 然后git commit --amend  获取Id587fdd4af3cdf4a73e3a8923b47b869920db99c保存
+8、其他项目 git add提交, git commit -m 'xxx' 然后git commit --amend，修改序列号为保存的获取Id587fdd4af3cdf4a73e3a8923b47b869920db99c的序列号，输入 ctrl+x ，输入y，输入回车
+9、回到.repo同级目录下，输入repo upload，放开注释, :wq！提交。
+
+repo 放弃提交
+1、repo abandon --all
+2、repo sync
+3、repo start master --all
+
+
+问题：
+error: .repo/manifests/: contains uncommitted changes
+1、进入到manifest中，git stash 、git clean -d -f
+2、然后repo sync(2次)，出现问题middleware/dfx/: discarding 1 commits
+3、
+
+自动处理
+1、删除除了脚本以外的全部东西
+2、删除.repo
+3、创建.repo并复制内容cp -r  git-repo ../jenkins_workplace/Rainbow/.repo/repo
+4、repo init
+4、对Rainbow赋权限  chmod -R 777 Rainbow
+5、
+
+2. 修改用户权限
+采用修改系统中/etc/sudoers文件的方法分配用户权限。因为此文件只有r权限，在改动前需要增加w权限，改动后，再去掉w权限。
+sudo chmod +w /etc/sudoers
+sudo vim /etc/sudoers
+然后找到以下代码：
+# User privilege specification
+root　ALL=(ALL:ALL) ALL
+并添加需要sudo权限的用户名：
+# User privilege specification
+root　ALL=(ALL:ALL) ALL
+XXX ALL=(ALL:ALL) ALL //这一行为添加的代码，XXX表示需要添加权限的用户名
+将sudoers文件的操作权限改为只读模式.
+sudo chmod -w /etc/sudoers
+
+https://updates.jenkins.io/update-center.json    
+
+
+mk在repo upload的最下面，且注释内容不用有空格
+
+切记：进到项目下，git config --global user.name "root@QD-Complier-A01"    
+邮箱设置为git config --global user.email "a01-tongji.sys@goertek.com"
+
+
+1、临时文件去重 （完成）
+2、xml叠加
+3、邮件发放机制
+4、编译机制
+5、分支监控
+6、repo sync重试
+
+
+拉去分支代码：
+1、git branch -a
+git checkout 分支名（没有-b）
+git pull origin 分支名gitdir=$(git rev-parse --git-dir); scp -p -P 29418 a01-tongji.sys@10.10.0.49:hooks/commit-msg ${gitdir}/hooks/
+2、git提交git push origin HEAD:refs/for/master
+
+解压:
+tar -zxvf FileName.tar.gz
+压缩:
+tar -zcvf FileName.tar.gz DirName
+
+2021.1023.01
+2021102301
